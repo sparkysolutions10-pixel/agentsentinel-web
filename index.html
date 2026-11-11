@@ -4733,7 +4733,9 @@
   // ==========================================
   // 5. SESSION & NAV CONTROLS
   // ==========================================
-  function completeLogin(email, authMethod = 'Direct', plan = 'free', name = '', picture = '') {
+  const CLOUD_API_BASE = 'https://autonomous-ai-agency-production.up.railway.app';
+
+  async function completeLogin(email, authMethod = 'Direct', plan = 'free', name = '', picture = '') {
     const user = {
       email: email,
       name: name || email.split('@')[0],
@@ -4742,9 +4744,29 @@
       authMethod: authMethod,
       loggedInAt: Date.now()
     };
+
+    try {
+      // Connect to Real Cloud MCP SaaS Backend on Railway
+      const res = await fetch(CLOUD_API_BASE + '/api/v1/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, name: user.name, authMethod: authMethod })
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        user.apiKey = data.user.apiKey;
+        user.plan = data.user.plan;
+        user.quotaLimit = data.user.quotaLimit;
+        user.sessionToken = data.user.sessionToken;
+      }
+    } catch (e) {
+      console.warn('Live cloud sync fallback:', e);
+    }
+
     try {
       localStorage.setItem('agentsentinel_user', JSON.stringify(user));
       localStorage.setItem('sentinel_user_email', email);
+      if (user.apiKey) localStorage.setItem('agentsentinel_api_key', user.apiKey);
     } catch (e) {}
 
     closeAuthModal();
