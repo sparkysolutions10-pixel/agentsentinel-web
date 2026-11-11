@@ -1626,11 +1626,17 @@
 
   /* Switch Link */
   .auth-switch-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
     color: var(--cyan);
     text-decoration: none;
     font-weight: 600;
     transition: color 0.15s ease;
     cursor: pointer;
+    display: inline;
   }
   .auth-switch-link:hover {
     color: #7dd3fc;
@@ -2868,6 +2874,24 @@
       <button onclick="copyToClipboard('npx @sparkysolutions/agentsentinel check --cmd &quot;rm -rf /&quot;', this, 'Copied!')" class="btn-copy-code" style="background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Copy Command</button>
     </div>
 
+    <!-- 1-Click MCP Config Card for Claude Desktop & Cursor (Alex Builder Request) -->
+    <div style="margin: 0 auto 36px auto; max-width: 720px; background: rgba(11, 16, 27, 0.85); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 18px 22px; text-align: left;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 14px;">⚡</span>
+          <span style="font-size: 12px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Claude Desktop &amp; Cursor IDE MCP Config:</span>
+        </div>
+        <button onclick="copyToClipboard(document.getElementById('claude-config-preview').textContent, this, 'Copied MCP JSON!')" class="btn-copy-code" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 5px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          Copy MCP JSON
+        </button>
+      </div>
+      <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">
+        Paste into your <code>claude_desktop_config.json</code> or Cursor MCP settings to enforce zero-trust token filtering:
+      </p>
+      <pre id="claude-config-preview" style="background: #070b12; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #a5f3fc; overflow-x: auto; margin: 0; line-height: 1.5;"></pre>
+    </div>
+
     <div class="arch-grid">
       <div class="arch-card">
         <div class="arch-step-badge">1</div>
@@ -2997,6 +3021,7 @@
       <!-- Tier 3: Enterprise -->
       <div class="pricing-card">
         <div>
+          <div style="display: inline-flex; align-items: center; gap: 4px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-bottom: 6px;">🛡️ SOC2 TYPE II &amp; 99.99% SLA</div>
           <div class="plan-name">Enterprise Security</div>
           <div class="plan-desc">For teams, AI startups, and organizations requiring dedicated cloud containment.</div>
           <div class="plan-price-box">
@@ -3008,6 +3033,7 @@
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 10,000,000 Actions/mo Dedicated Cloud Quota</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Dedicated Isolated Docker Container &amp; VPC</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> SOC 2 Type II &amp; HIPAA Audit Export</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> <strong style="color: #34d399;">99.99% Uptime SLA &amp; Dedicated Data Sovereignty</strong></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Custom AST Security Policy Engineering</li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> 24/7 Dedicated WhatsApp &amp; Slack Support</li>
           </ul>
@@ -3355,7 +3381,7 @@
         <div class="auth-input-group">
           <div class="auth-input-label">
             <span>Password</span>
-            <a href="javascript:void(0)" onclick="switchAuthMode('forgot-email')" class="auth-switch-link" style="font-size: 12px; font-weight: 500;">Forgot password?</a>
+            <button type="button" onclick="switchAuthMode('forgot-email')" class="auth-switch-link" style="font-size: 12px; font-weight: 500;">Forgot password?</button>
           </div>
           <div class="password-input-wrap">
             <input type="password" id="signInPassword" class="input-dark" placeholder="••••••••••••" required autocomplete="current-password">
@@ -3368,7 +3394,7 @@
           Continue
         </button>
         <div style="margin-top: 18px; font-size: 13px; color: var(--text-secondary); text-align: center;">
-          Don't have an account? <a href="javascript:void(0)" onclick="switchAuthMode('signup')" class="auth-switch-link">Sign up</a>
+          Don't have an account? <button type="button" onclick="switchAuthMode('signup')" class="auth-switch-link">Sign up</button>
         </div>
       </form>
 
@@ -3400,7 +3426,7 @@
           Create account
         </button>
         <div style="margin-top: 18px; font-size: 13px; color: var(--text-secondary); text-align: center;">
-          Already have an account? <a href="javascript:void(0)" onclick="switchAuthMode('signin')" class="auth-switch-link">Log in</a>
+          Already have an account? <button type="button" onclick="switchAuthMode('signin')" class="auth-switch-link">Log in</button>
         </div>
       </form>
 
@@ -3458,7 +3484,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 14px;">
-          <a href="javascript:void(0)" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to all options</a>
+          <button type="button" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to all options</button>
         </div>
       </div>
 
@@ -3516,7 +3542,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 14px;">
-          <a href="javascript:void(0)" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to all options</a>
+          <button type="button" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to all options</button>
         </div>
       </div>
 
@@ -3530,7 +3556,7 @@
           Continue
         </button>
         <div style="text-align: center;">
-          <a href="javascript:void(0)" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to log in</a>
+          <button type="button" onclick="switchAuthMode('signin')" class="auth-switch-link" style="font-size: 13px;">← Back to log in</button>
         </div>
       </form>
 
@@ -3580,8 +3606,8 @@
         </button>
 
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
-          <a href="javascript:void(0)" onclick="resendResetOtp()" class="auth-switch-link">Resend code</a>
-          <a href="javascript:void(0)" onclick="switchAuthMode('signin')" class="auth-switch-link">← Back to log in</a>
+          <button type="button" onclick="resendResetOtp()" class="auth-switch-link">Resend code</button>
+          <button type="button" onclick="switchAuthMode('signin')" class="auth-switch-link">← Back to log in</button>
         </div>
       </form>
     </div>

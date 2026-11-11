@@ -1170,7 +1170,7 @@ URL:  https://mcp.getagentsentinel.com/sse</pre>
               Paste this configuration directly into your <code>%APPDATA%\Claude\claude_desktop_config.json</code> (Windows) or <code>~/Library/Application Support/Claude/claude_desktop_config.json</code> (macOS):
             </p>
             <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
-              <button onclick="checkProWorkspaceAction(() => copyToClipboard(document.getElementById('claudeConfigSnippet').textContent, this, 'Copied JSON!'))" class="btn-action-primary" style="font-size: 11px; padding: 6px 14px;">Copy JSON</button>
+              <button onclick="copyToClipboard(document.getElementById('claudeConfigSnippet').textContent, this, 'Copied JSON!')" class="btn-action-primary" style="font-size: 11px; padding: 6px 14px;">Copy JSON</button>
             </div>
             <pre class="code-snippet" id="claudeConfigSnippet">{
   "mcpServers": {
