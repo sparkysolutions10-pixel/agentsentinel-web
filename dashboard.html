@@ -1681,6 +1681,9 @@ client = MultiServerMCPClient({
           
           if (hasPaymentSuccess) {
             const pending = localStorage.getItem('agentsentinel_pending_checkout') || searchParams.get('plan') || 'pro';
+            const rzpPaymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id') || ('pay_redirect_' + Date.now());
+            const emailParam = searchParams.get('email') || '';
+
             if (pending === 'pro_booster' || pending === 'enterprise_booster') {
               const addedActions = pending === 'enterprise_booster' ? 5000000 : 500000;
               const curQuota = parseInt(localStorage.getItem('agentsentinel_extra_quota') || '0');
@@ -1701,8 +1704,26 @@ client = MultiServerMCPClient({
               } else {
                 userObj.plan = targetPlan;
               }
+              if (emailParam) userObj.email = emailParam;
               localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
               localStorage.setItem('sentinel_user_email', userObj.email);
+
+              // 🛡️ Instant Cloud Provisioning on Railway Backend (Rule 2)
+              try {
+                fetch('https://autonomous-ai-agency-production.up.railway.app/api/v1/keys/upgrade?email=' + encodeURIComponent(userObj.email) + '&plan=' + encodeURIComponent(targetPlan) + '&payment_id=' + encodeURIComponent(rzpPaymentId))
+                  .then(function(r) { return r.json(); })
+                  .then(function(data) {
+                    if (data && data.apiKey) {
+                      userObj.apiKey = data.apiKey;
+                      userObj.quotaLimit = data.quotaLimit || (targetPlan === 'enterprise' ? 10000000 : 1000000);
+                      localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
+                      localStorage.setItem('agentsentinel_api_key', data.apiKey);
+                      const keyEl = document.getElementById('liveApiKeyText');
+                      if (keyEl) keyEl.textContent = data.apiKey;
+                    }
+                  })
+                  .catch(function(e) { console.warn('Cloud key upgrade err:', e); });
+              } catch(err){}
             }
             try { localStorage.removeItem('agentsentinel_pending_checkout'); } catch(e) {}
             window.history.replaceState({}, document.title, window.location.pathname);
@@ -2101,8 +2122,9 @@ client = MultiServerMCPClient({
       window.boosterWebhookPoller = setInterval(async () => {
         try {
           const user = JSON.parse(localStorage.getItem('agentsentinel_user') || '{}');
-          if (user.token) {
-            const res = await fetch('https://mcp.getagentsentinel.com/api/keys/upgrade?token=' + encodeURIComponent(user.token));
+          const token = user.token || user.apiKey || user.email;
+          if (token) {
+            const res = await fetch('https://autonomous-ai-agency-production.up.railway.app/api/v1/keys/upgrade?token=' + encodeURIComponent(token));
             if (res.ok) {
               const data = await res.json();
               if (data.upgraded) {
