@@ -1670,18 +1670,11 @@ client = MultiServerMCPClient({
       if (window.location.search) {
         try {
           const searchParams = new URLSearchParams(window.location.search);
-          const hasPaymentSuccess = 
-            searchParams.get('payment') === 'success' ||
-            searchParams.has('razorpay_payment_id') ||
-            searchParams.has('payment_id') ||
-            searchParams.has('tx') ||
-            searchParams.get('status') === 'success' ||
-            searchParams.get('plan') === 'pro' ||
-            searchParams.get('plan') === 'enterprise';
+          const rzpPaymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id');
+          const hasPaymentSuccess = (searchParams.get('payment') === 'success' || searchParams.get('status') === 'success') && Boolean(rzpPaymentId);
           
           if (hasPaymentSuccess) {
             const pending = localStorage.getItem('agentsentinel_pending_checkout') || searchParams.get('plan') || 'pro';
-            const rzpPaymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id') || ('pay_redirect_' + Date.now());
             const emailParam = searchParams.get('email') || '';
 
             if (pending === 'pro_booster' || pending === 'enterprise_booster') {
@@ -1691,39 +1684,33 @@ client = MultiServerMCPClient({
               alert('🎉 Quota Booster Refill Confirmed! +' + addedActions.toLocaleString() + ' actions added to your live Sovereign Key with lifetime carry-forward.');
             } else {
               const targetPlan = pending === 'enterprise' ? 'enterprise' : (pending === 'starter' ? 'starter' : 'pro');
-              let userObj = { email: 'developer@gmail.com', plan: targetPlan, loggedInAt: Date.now() };
+              let userObj = { email: 'developer@gmail.com', plan: 'free', loggedInAt: Date.now() };
               const rawStored = localStorage.getItem('agentsentinel_user');
               if (rawStored) {
                 try {
                   userObj = JSON.parse(rawStored);
-                  userObj.plan = targetPlan;
                 } catch(e) {
                   userObj.email = rawStored;
-                  userObj.plan = targetPlan;
                 }
-              } else {
-                userObj.plan = targetPlan;
               }
               if (emailParam) userObj.email = emailParam;
-              localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
-              localStorage.setItem('sentinel_user_email', userObj.email);
 
-              // 🛡️ Instant Cloud Provisioning on Railway Backend (Rule 2)
-              try {
-                fetch('https://autonomous-ai-agency-production.up.railway.app/api/v1/keys/upgrade?email=' + encodeURIComponent(userObj.email) + '&plan=' + encodeURIComponent(targetPlan) + '&payment_id=' + encodeURIComponent(rzpPaymentId))
-                  .then(function(r) { return r.json(); })
-                  .then(function(data) {
-                    if (data && data.apiKey) {
-                      userObj.apiKey = data.apiKey;
-                      userObj.quotaLimit = data.quotaLimit || (targetPlan === 'enterprise' ? 10000000 : 1000000);
-                      localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
-                      localStorage.setItem('agentsentinel_api_key', data.apiKey);
-                      const keyEl = document.getElementById('liveApiKeyText');
-                      if (keyEl) keyEl.textContent = data.apiKey;
-                    }
-                  })
-                  .catch(function(e) { console.warn('Cloud key upgrade err:', e); });
-              } catch(err){}
+              // Poll backend to confirm webhook has credited account
+              fetch('https://autonomous-ai-agency-production.up.railway.app/api/v1/keys/upgrade?email=' + encodeURIComponent(userObj.email))
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                  if (data && data.upgraded) {
+                    userObj.plan = data.plan;
+                    userObj.apiKey = data.apiKey;
+                    userObj.quotaLimit = data.quotaLimit || (targetPlan === 'enterprise' ? 10000000 : 1000000);
+                    localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
+                    localStorage.setItem('sentinel_user_email', userObj.email);
+                    localStorage.setItem('agentsentinel_api_key', data.apiKey);
+                    const keyEl = document.getElementById('liveApiKeyText');
+                    if (keyEl) keyEl.textContent = data.apiKey;
+                  }
+                })
+                .catch(function(e) { console.warn('Cloud key upgrade poller:', e); });
             }
             try { localStorage.removeItem('agentsentinel_pending_checkout'); } catch(e) {}
             window.history.replaceState({}, document.title, window.location.pathname);

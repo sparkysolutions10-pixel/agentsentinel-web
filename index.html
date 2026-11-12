@@ -4905,54 +4905,54 @@
     if (!window.location.search) return;
     try {
       const searchParams = new URLSearchParams(window.location.search);
-      const hasPaymentSuccess = 
-        searchParams.get('payment') === 'success' ||
-        searchParams.has('razorpay_payment_id') ||
-        searchParams.has('payment_id') ||
-        searchParams.has('tx') ||
-        searchParams.get('status') === 'success' ||
-        searchParams.get('plan') === 'pro' ||
-        searchParams.get('plan') === 'enterprise';
+      const rzpPaymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id');
+      const hasPaymentSuccess = (searchParams.get('payment') === 'success' || searchParams.get('status') === 'success') && Boolean(rzpPaymentId);
       
       if (hasPaymentSuccess) {
         const targetPlan = searchParams.get('plan') === 'enterprise' ? 'enterprise' : 'pro';
-        const rzpPaymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id') || ('pay_redirect_' + Date.now());
         const emailParam = searchParams.get('email') || '';
-        let userObj = { email: 'developer@gmail.com', plan: targetPlan, loggedInAt: Date.now() };
+        let userObj = { email: 'developer@gmail.com', plan: 'free', loggedInAt: Date.now() };
         const rawStored = localStorage.getItem('agentsentinel_user');
         if (rawStored) {
           try {
             userObj = JSON.parse(rawStored);
-            userObj.plan = targetPlan;
           } catch(e) {
             userObj.email = rawStored;
-            userObj.plan = targetPlan;
           }
-        } else {
-          userObj.plan = targetPlan;
         }
         if (emailParam) userObj.email = emailParam;
-        localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
-        localStorage.setItem('sentinel_user_email', userObj.email);
 
-        // Instant cloud sync to provision live sovereign key & 1,000,000 quota
-        try {
-          fetch('https://autonomous-ai-agency-production.up.railway.app/api/v1/keys/upgrade?email=' + encodeURIComponent(userObj.email) + '&plan=' + encodeURIComponent(targetPlan) + '&payment_id=' + encodeURIComponent(rzpPaymentId))
+        showToast('🔄 Verifying Payment...', 'Connecting to Razorpay gateway to confirm activation...', '⏳');
+
+        // Poll backend to confirm webhook has credited account
+        let attempts = 0;
+        const maxAttempts = 5;
+        const checkUpgrade = function() {
+          fetch(CLOUD_API_BASE + '/api/v1/keys/upgrade?email=' + encodeURIComponent(userObj.email))
             .then(function(r) { return r.json(); })
             .then(function(data) {
-              if (data && data.apiKey) {
+              if (data && data.upgraded) {
+                userObj.plan = data.plan;
                 userObj.apiKey = data.apiKey;
                 userObj.quotaLimit = data.quotaLimit || (targetPlan === 'enterprise' ? 10000000 : 1000000);
                 localStorage.setItem('agentsentinel_user', JSON.stringify(userObj));
+                localStorage.setItem('sentinel_user_email', userObj.email);
                 localStorage.setItem('agentsentinel_api_key', data.apiKey);
                 checkUserSession();
+                window.history.replaceState({}, document.title, window.location.pathname);
+                showToast('🎉 Payment Confirmed!', (userObj.plan === 'enterprise' ? 'Enterprise' : 'Pro') + ' Tier Active. Sovereign Key allocated.', '✨');
+              } else if (attempts < maxAttempts) {
+                attempts++;
+                setTimeout(checkUpgrade, 2000);
+              } else {
+                showToast('ℹ️ Payment Pending', 'Your payment is being confirmed. Please refresh in a moment.', '⏳');
               }
             })
-            .catch(function(e) { console.warn('Cloud key sync:', e); });
-        } catch(err){}
-
-        window.history.replaceState({}, document.title, window.location.pathname);
-        showToast('🎉 Payment Confirmed!', (targetPlan === 'enterprise' ? 'Enterprise' : 'Pro') + ' Tier Unlocked Instantly. Live Sovereign Key allocated with zero friction.', '✨');
+            .catch(function(e) {
+              console.warn('Upgrade poll note:', e);
+            });
+        };
+        setTimeout(checkUpgrade, 1500);
       }
     } catch (e) {
       console.warn('Payment redirect check failed:', e);
