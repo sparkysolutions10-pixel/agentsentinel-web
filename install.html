@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install AgentSentinel — 1-Click Zero-Trust AI Security</title>
+  <link rel="icon" type="image/svg+xml" href="assets/agentsentinel_luxury_logo.svg">
+  <style>
+    :root {
+      --bg: #0b101b;
+      --card-bg: #0f172a;
+      --border: #1e293b;
+      --cyan: #00f5ff;
+      --purple: #8b5cf6;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .container {
+      max-width: 640px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 245, 255, 0.1);
+      text-align: center;
+    }
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 22%;
+      box-shadow: 0 0 30px rgba(0, 245, 255, 0.4);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 245, 255, 0.1);
+      color: var(--cyan);
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .btn-install {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #00f5ff, #8b5cf6);
+      color: #0b101b;
+      font-size: 16px;
+      font-weight: 700;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-install:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 245, 255, 0.4);
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 32px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider span { padding: 0 12px; }
+    .features-list {
+      text-align: left;
+      background: #090e1a;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 24px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .feature-item:last-child { margin-bottom: 0; }
+    .check { color: #10b981; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="assets/agentsentinel_luxury_logo_1024.png" alt="AgentSentinel Logo" class="logo">
+    <div class="badge">🛡️ GitHub App 1-Click Setup</div>
+    <h1>Install AgentSentinel</h1>
+    <p>Protect your repositories with automated Zero-Trust AST Security, AI Wallet Drainer defense, and prompt injection interception. No YAML files required.</p>
+
+    <!-- 1-Click Manifest Form for GitHub App Registration -->
+    <form action="https://github.com/settings/apps/new" method="post" target="_blank">
+      <input type="hidden" name="manifest" id="manifestInput">
+      <button type="submit" class="btn-install">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        1-Click Connect to GitHub
+      </button>
+    </form>
+
+    <div class="features-list">
+      <div class="feature-item"><span class="check">✓</span> Automated Pull Request Security Audits</div>
+      <div class="feature-item"><span class="check">✓</span> Zero-Trust AI Agent Spending Limit Enforcement</div>
+      <div class="feature-item"><span class="check">✓</span> Malicious Postinstall Script & Drainer Interceptor</div>
+      <div class="feature-item"><span class="check">✓</span> Instant Verification Badge on every PR</div>
+    </div>
+  </div>
+
+  <script>
+    const manifest = {
+      name: "AgentSentinel Bot",
+      url: "https://getagentsentinel.com",
+      hook_attributes: {
+        url: "https://getagentsentinel.com/api/github/webhook",
+        active: false
+      },
+      redirect_url: "https://getagentsentinel.com",
+      description: "Zero-trust AST runtime firewall & prompt-injection interceptor for autonomous AI agents, tool calls, and MCP servers.",
+      public: true,
+      default_permissions: {
+        pull_requests: "write",
+        issues: "write",
+        contents: "read",
+        checks: "write",
+        statuses: "write"
+      },
+      default_events: [
+        "pull_request",
+        "pull_request_review",
+        "issue_comment"
+      ]
+    };
+    document.getElementById('manifestInput').value = JSON.stringify(manifest);
+  </script>
+</body>
+</html>
