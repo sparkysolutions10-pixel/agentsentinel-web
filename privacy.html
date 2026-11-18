@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | AgentSentinel</title>
+  <link rel="icon" type="image/png" href="assets/agentsentinel_logo_coderabbit_white_128.png">
+  <style>
+    :root {
+      --bg: #0b101b;
+      --card-bg: #111827;
+      --border: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    h1, h2, h3 { color: #ffffff; }
+    h1 { font-size: 28px; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+    h2 { font-size: 20px; margin-top: 32px; color: var(--accent); }
+    p, li { color: var(--text-muted); font-size: 15px; }
+    ul { padding-left: 20px; }
+    .badge {
+      display: inline-block;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">Zero-Trust & Client-Side Privacy</div>
+    <h1>Privacy Policy for AgentSentinel</h1>
+    <p><em>Last updated: November 18, 2026</em></p>
+
+    <p>AgentSentinel ("we", "our", or "us") provides autonomous AI agent security tooling, GitHub Apps, and GitHub Actions. We are committed to absolute data privacy and transparency.</p>
+
+    <h2>1. Zero Telemetry & Local Execution Principle</h2>
+    <p>AgentSentinel is architected from the ground up on a <strong>Zero-Trust, Zero-Telemetry</strong> model:</p>
+    <ul>
+      <li><strong>No Source Code Transmission:</strong> Your repository code, pull requests, file contents, and commit diffs are analyzed strictly within your GitHub Actions runner or local execution container. Zero source code is transmitted to or stored on our servers.</li>
+      <li><strong>No Environment Secret Access:</strong> AgentSentinel does not read, intercept, store, or transmit your API keys, private credentials, or environment secrets.</li>
+      <li><strong>Local AST Parsing:</strong> All Abstract Syntax Tree (AST) validation and command checks occur in ephemeral memory during the runner lifecycle and are destroyed upon process termination.</li>
+    </ul>
+
+    <h2>2. Information We Receive</h2>
+    <p>When you interact with AgentSentinel via GitHub Marketplace or our website:</p>
+    <ul>
+      <li><strong>GitHub Installation Metadata:</strong> When installed as a GitHub App, GitHub delivers standard webhook identifiers (installation ID, repository name, sender username) to authorize the integration.</li>
+      <li><strong>Support Inquiries:</strong> If you contact us for technical support, we receive your provided contact email address solely to reply to your inquiry.</li>
+    </ul>
+
+    <h2>3. Data Retention & Third Parties</h2>
+    <p>We do not sell, rent, monetize, or share your data with any third parties or advertising networks. We do not use third-party tracking cookies or behavioral trackers.</p>
+
+    <h2>4. Security Controls</h2>
+    <p>All communication between your GitHub runner, website services, and APIs is secured using modern TLS 1.3 encryption. We maintain strict compliance with the Principle of Least Privilege.</p>
+
+    <h2>5. Contact Us</h2>
+    <p>For questions or privacy inquiries regarding AgentSentinel, please reach out via:</p>
+    <ul>
+      <li>Website: <a href="https://getagentsentinel.com">https://getagentsentinel.com</a></li>
+      <li>Email: <a href="mailto:support@getagentsentinel.com">support@getagentsentinel.com</a></li>
+      <li>GitHub: <a href="https://github.com/AgentSentinel-AI">AgentSentinel-AI</a></li>
+    </ul>
+  </div>
+</body>
+</html>
